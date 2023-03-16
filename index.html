@@ -96,20 +96,18 @@ We all expect to be able to buy an excellent cup of coffee from the many brillia
 					const total = payment.transactions[0].amount.total;
 					const currency = payment.transactions[0].amount.currency;
 
-					 // Crear un objeto JSON con los datos de la transacción
+					 // Create a JSON object with the transaction data
 					 const transactionData = {
 						id: transactionId,
 						total: total,
 						currency: currency
 					};
 
-					// Guardar el objeto JSON en el almacenamiento local
+					// Save the JSON object to local storage
 					localStorage.setItem('transactionData', JSON.stringify(transactionData));
 					
-					// Redirigir al usuario a la página de confirmación
+					// Redirect user to confirmation page
 					window.location.href = 'success.html';
-
-					//alert('Transacción exitosa\nID: ' + transactionId + '\nTotal: ' + total + ' ' + currency);
 				});
 			}
 		}, '#btn-pay');

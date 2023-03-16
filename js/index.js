@@ -8,7 +8,7 @@ botonRegresar.addEventListener('click', () => {
 fetch('js/data.json')
   .then(response => response.json())
   .then(data => {
-    // Rellenar los campos del formulario con los datos del JSON
+    // Fill the form fields with the JSON data
     document.getElementById('name').value = data.name;
     document.getElementById('lastname').value = data.lastname;
     document.getElementById('email').value = data.emaili;
@@ -19,13 +19,13 @@ fetch('js/data.json')
     document.getElementById('street').value = data.adress.street;
 }).catch(error => console.error(error));
 
-// Habilitar el botón de edición
+// Enable edit button
 const editButton = document.getElementById('edit-button');
 editButton.addEventListener('click', function() {
   const formFields = document.querySelectorAll('#shipping-form input');
   formFields.forEach(field => field.removeAttribute('readonly'));
 
-    // Obtener los datos del formulario
+    // Get form data
     const firstName = document.getElementById('name').value;
     const lastName = document.getElementById('lastname').value;
     const email = document.getElementById('email').value;
@@ -35,7 +35,7 @@ editButton.addEventListener('click', function() {
     const postalCode = document.getElementById('postal-code').value;
     const street = document.getElementById('street').value;
 
-    // Crear un objeto con los datos del formulario
+    // Create an object with the form data
     const formData = {
     firstName: firstName,
     lastName: lastName,
@@ -49,18 +49,17 @@ editButton.addEventListener('click', function() {
     }
     };
 
-    // Leer los datos actuales del archivo "datos.json"
+    // Read the current data from the file "data.json"
     fetch('js/data.json')
     .then(response => response.json())
     .then(data => {
-    // Agregar los nuevos datos al array de datos
-    //console.log(formData)
+    // Add the new data to the data array
     data.push(formData);
 
-    // Convertir los datos a formato JSON
+    // Convert the data to JSON format
     const jsonData = JSON.stringify(data);
 
-    // Guardar los nuevos datos en el archivo "datos.json"
+    // Save the new data in the file "data.json"
     fetch('js/data.json', {
         method: 'PUT',
         body: jsonData
