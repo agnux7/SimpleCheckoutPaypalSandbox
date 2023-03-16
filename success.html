@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Successful purchase!</title>
+</head>
+<body>
+  <h1>Successful purchase!</h1>
+  <p>Thank you for your purchase, <b><span id="name"></span> <span id="lastname"></span></b></p>
+  <p>A purchase confirmation will be sent to <span id="email"></span></p>
+  <p>The shipping address is:</p>
+  <ul>
+    <li><span id="street"></span></li>
+    <li><span id="city"></span>, <span id="estate"></span> <span id="cp"></span></li>
+    <li><span id="country"></span></li>
+  </ul>
+
+  <p><b>ID Trans.</b> <span id="transaction-id"></span></p>
+  <p><b>Total.</b> <span id="transaction-currency"></span><span id="transaction-total"></span></p>
+  
+  <button id="btn-back">Back to store</button>
+
+
+  <script>
+    // Load the data from the JSON file
+    fetch('js/data.json')
+      .then(response => response.json())
+      .then(data => {
+        // Display the data on the page
+        document.getElementById('name').textContent = data.name;
+        document.getElementById('lastname').textContent = data.lastname;
+        document.getElementById('email').textContent = data.emaili;
+        document.getElementById('street').textContent = data.adress.street;
+        document.getElementById('city').textContent = data.adress.city;
+        document.getElementById('estate').textContent = data.adress.state;
+        document.getElementById('cp').textContent = data.adress.cp;
+        document.getElementById('country').textContent = data.adress.country;
+      })
+      .catch(error => console.error('Error:', error));
+
+    const botonRegresar = document.getElementById('btn-back');
+
+    botonRegresar.addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
+
+    // Get data from localstorage
+    const transactionData = JSON.parse(localStorage.getItem('transactionData'));
+
+    // Load data from localstorage
+    document.getElementById('transaction-id').innerHTML = transactionData.id;
+    document.getElementById('transaction-total').innerHTML = transactionData.total;
+    document.getElementById('transaction-currency').innerHTML = transactionData.currency;
+
+  </script>
+</body>
+</html>

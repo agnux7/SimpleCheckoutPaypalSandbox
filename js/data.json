@@ -1,0 +1,13 @@
+{
+  "name": "Juan",
+  "lastname": "Pérez",
+  "emaili": "juan.perez@example.com",
+  "phone": "1234567890",
+  "adress": {
+    "street": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "cp": "94111",
+    "country": "USA"
+  }
+}

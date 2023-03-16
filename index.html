@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv=”Content-Type” content=”text/html; charset=UTF-8″ />
+	<title>Ecommerce Paypal Sandbox</title>
+	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+	<style>
+		.product {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+		.image-product {
+			flex: 1 0 300px;
+		}
+		.image-product img {
+			max-width: 50%;
+			height: auto;
+		}
+		.descripcion-producto {
+			flex: 2 0 300px;
+		}
+		.price-product {
+			font-size: 24px;
+			font-weight: bold;
+			margin-bottom: 10px;
+		}
+		.qty-product {
+			display: flex;
+			align-items: center;
+			margin-top: 10px;
+		}
+		.qty-product input {
+			width: 50px;
+			margin-right: 10px;
+		}
+		#profile {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div id="profile">
+		<span id="name"></span> <span id="lastname"></span>
+		<button id="btn-profile">My profile</button>
+	</div>
+	<h1>!!How to Make the Best Coffee at Home</h1>
+	<div class="product">
+		<div class="image-product">
+			<img src="https://m.media-amazon.com/images/I/617FJv-e3hL.jpg" alt="How to Make the Best Coffee at Home">
+		</div>
+		<div class="descripcion-producto">
+			<h2>How to Make the Best Coffee at Home</h2>
+			<p> A world-leading coffee expert shows how to make barista-level coffee at home
+We all expect to be able to buy an excellent cup of coffee from the many brilliant coffee shops available. But what about the coffee we make at home? Shouldn't that be just as good?</p>
+			<div class="price-product">
+				$187.50
+				<input type="hidden" value="187.50">
+			</div>
+			<div class="qty-product">
+				<label>Cantidad:</label>
+				<input type="number" min="1" max="10" value="1">
+			</div>
+			<button id="btn-pay"></button>
+		</div>
+	</div>
+	<script>
+		// PayPal Settings
+		paypal.Button.render({
+			env: 'sandbox',
+			client: {
+				sandbox: 'AeyhQniEkGYYsGzw4FCD1kNs7lOYhhqlkpttKhYKpJpUmR574KSnuH6vpXLoUGJ5QNMdrKQLBWcAHfVT'
+			},
+			commit: true,
+			payment: function(data, actions) {
+				// Creation of the payment transaction
+				var price = document.querySelector('.price-product input').value;
+				var qty = document.querySelector('.qty-product input').value;
+				var total = qty * price;
+				return actions.payment.create({
+					transactions: [{
+						amount: {
+							total: total.toFixed(2),
+							currency: 'USD'
+						}
+					}]
+				});
+			},
+			onAuthorize: function (data, actions) {
+				return actions.payment.execute()
+				.then(function (payment) {
+					const transactionId = payment.transactions[0].related_resources[0].sale.id;
+					const total = payment.transactions[0].amount.total;
+					const currency = payment.transactions[0].amount.currency;
+
+					 // Crear un objeto JSON con los datos de la transacción
+					 const transactionData = {
+						id: transactionId,
+						total: total,
+						currency: currency
+					};
+
+					// Guardar el objeto JSON en el almacenamiento local
+					localStorage.setItem('transactionData', JSON.stringify(transactionData));
+					
+					// Redirigir al usuario a la página de confirmación
+					window.location.href = 'success.html';
+
+					//alert('Transacción exitosa\nID: ' + transactionId + '\nTotal: ' + total + ' ' + currency);
+				});
+			}
+		}, '#btn-pay');
+
+		//Load data
+		fetch('js/data.json')
+			.then(response => response.json())
+			.then(data => {
+				document.getElementById('name').textContent = data.name;
+				document.getElementById('lastname').textContent = data.lastname;
+			})
+			.catch(error => console.error('Error:', error));
+
+		const btnProfile = document.getElementById('btn-profile');
+
+		btnProfile.addEventListener('click', () => {
+  			window.location.href = 'profile.html';
+		});
+	</script>
+</body>
+</html>
